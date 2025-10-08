@@ -50,6 +50,11 @@ AlertSphere/
 │   └── tailwind.config.js # Tailwind configuration
 └── README.md
 ```
+## 👥 TechStack
+
+- **Backend**: FastAPI, SQLAlchemy, APScheduler
+- **Frontend**: React, Vite, Tailwind CSS, Recharts
+- **Database**: SQLite (dev), PostgreSQL (prod ready)
 
 ## 🚀 Quick Start
 
@@ -132,20 +137,6 @@ AlertSphere/
 - **Organization**: Top-level entity
 - **UserAlertPreference**: Tracks read/snooze status per user
 
-## 🎨 User Interface
-
-### Admin Dashboard
-- **Alert Creation**: Form with team/user selection
-- **Alert Management**: Table with filtering and archiving
-- **Analytics**: Team-based pie charts and delivery statistics
-- **Real-time Updates**: Auto-refresh for live data
-
-### User Dashboard
-- **Alert Viewing**: Clean list of active alerts
-- **Status Management**: Mark as read/unread, snooze
-- **Visual Indicators**: Color-coded read/unread states
-- **Team Switching**: Easy navigation between teams
-
 ## 🔧 Configuration
 
 ### Environment Variables
@@ -162,32 +153,6 @@ DEBUG=True
 ```env
 VITE_API_URL=http://localhost:8000
 ```
-
-### Database
-- **Development**: SQLite (included)
-- **Production**: PostgreSQL (recommended)
-- **Migrations**: Alembic (future enhancement)
-
-## 🚀 Deployment
-
-### Backend Deployment
-1. **Production Server**: Use Gunicorn with Uvicorn workers
-2. **Database**: Migrate to PostgreSQL
-3. **Environment**: Set production environment variables
-4. **Monitoring**: Add logging and health checks
-
-### Frontend Deployment
-1. **Build**: `npm run build`
-2. **Hosting**: Deploy `dist/` folder to any static host
-3. **CDN**: Use CloudFlare or similar for performance
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📝 Development Roadmap
 
@@ -209,44 +174,8 @@ VITE_API_URL=http://localhost:8000
 - 🔄 Integration with external tools (Slack, Teams)
 - 🔄 Advanced reporting and insights
 
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**Backend won't start**
-- Check Python version (3.10+ required)
-- Verify virtual environment is activated
-- Install dependencies: `pip install -r requirements.txt`
-
-**Frontend build errors**
-- Clear node_modules: `rm -rf node_modules && npm install`
-- Check Node.js version (18+ required)
-- Verify Tailwind CSS configuration
-
-**Database issues**
-- Run seed data: `python seed_data.py`
-- Check database file permissions
-- Verify SQLAlchemy models
-
-**API connection errors**
-- Ensure backend is running on port 8000
-- Check CORS settings in FastAPI
-- Verify API endpoints in browser dev tools
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Team
-
-- **Backend**: FastAPI, SQLAlchemy, APScheduler
-- **Frontend**: React, Vite, Tailwind CSS, Recharts
-- **Database**: SQLite (dev), PostgreSQL (prod ready)
-
-## 📞 Support
-
-For support, email support@alertsphere.com or create an issue in the GitHub repository.
-
----
 
 **AlertSphere** - Making organizational communication more efficient, one alert at a time. 🚀
