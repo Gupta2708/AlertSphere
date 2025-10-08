@@ -30,14 +30,14 @@ def seed():
     db.refresh(fin)
 
     # Create users
-    alice = User(name="Alice", team_id=eng.id)
-    carol = User(name="Carol", team_id=mkt.id)
-    eve = User(name="Eve", team_id=fin.id)
-    db.add_all([alice, carol, eve])
+    vibhu = User(name="Vibhu", team_id=eng.id)
+    raj = User(name="Raj", team_id=mkt.id)
+    shubham = User(name="Shubham", team_id=fin.id)
+    db.add_all([vibhu, raj, shubham])
     db.commit()
-    db.refresh(alice)
-    db.refresh(carol)
-    db.refresh(eve)
+    db.refresh(vibhu)
+    db.refresh(raj)
+    db.refresh(shubham)
 
     now = datetime.utcnow()
     # Org-level alert
@@ -71,10 +71,10 @@ def seed():
         archived=False
     )
     db.add(fin_alert)
-    # User-level alert (Eve)
-    eve_alert = Alert(
-        title="Eve Only Alert",
-        message="This is for Eve only.",
+    # User-level alert (Shubham)
+    shubham_alert = Alert(
+        title="Shubham Only Alert",
+        message="This is for Shubham only.",
         severity=SeverityEnum.critical,
         delivery_type=DeliveryTypeEnum.in_app,
         reminder_frequency=2,
@@ -83,11 +83,11 @@ def seed():
         visibility_type=VisibilityTypeEnum.user,
         organization_id=org.id,
         team_id=fin.id,
-        user_id=eve.id,
+        user_id=shubham.id,
         is_active=True,
         archived=False
     )
-    db.add(eve_alert)
+    db.add(shubham_alert)
     db.commit()
     print("Seeded organization, teams, users, and alerts.")
 
