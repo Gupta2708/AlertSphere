@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Admin APIs
 export const createAlert = async (data) => fetch(`${BASE_URL}/admin/alerts`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json());
