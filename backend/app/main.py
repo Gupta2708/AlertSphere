@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from app.models import Base  # Import all models
+from contextlib import asynccontextmanager
+from app.models import Base 
 from app.routes import admin, user
 from app.services.scheduler import start_scheduler
 from app.utils.db import engine
@@ -8,7 +9,12 @@ from fastapi.middleware.cors import CORSMiddleware
 # Create all tables once on startup
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="AlertSphere API", version="0.1")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    start_scheduler()
+    yield
+
+app = FastAPI(title="AlertSphere API", version="0.1", lifespan=lifespan)
 
 # CORS for frontend dev server
 app.add_middleware(
@@ -25,10 +31,6 @@ app.add_middleware(
 
 app.include_router(admin.router)
 app.include_router(user.router)
-
-@app.on_event("startup")
-def on_startup():
-    start_scheduler()
 
 @app.get("/")
 def root():
