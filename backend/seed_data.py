@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 Base.metadata.create_all(bind=engine)
 
-def seed():
+def run_seed():
     db = SessionLocal()
     # Clear existing data
     db.query(Alert).delete()
@@ -92,4 +92,4 @@ def seed():
     print("Seeded organization, teams, users, and alerts.")
 
 if __name__ == "__main__":
-    seed()
+    run_seed()

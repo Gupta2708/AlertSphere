@@ -1,13 +1,20 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from app.models import Base 
+from app.models import Base
 from app.routes import admin, user
 from app.services.scheduler import start_scheduler
-from app.utils.db import engine
+from app.utils.db import engine, SessionLocal
 from fastapi.middleware.cors import CORSMiddleware
+from app.models import Team
+from seed_data import run_seed
 
 # Create all tables once on startup
 Base.metadata.create_all(bind=engine)
+# Auto-seed DB if there are no teams
+session = SessionLocal()
+if not session.query(Team).first():
+    run_seed()
+session.close()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
