@@ -7,6 +7,12 @@ import {
   getTeams,
   getUsers
 } from '../api/api';
+import Card from '../components/Card';
+import SectionHeader from '../components/SectionHeader';
+import AlertList from '../components/AlertList';
+import SnoozedAlertsList from '../components/SnoozedAlertsList';
+import { Bell, BellOff } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const UserDashboard = () => {
   const [teams, setTeams] = useState([]);
@@ -117,10 +123,21 @@ const UserDashboard = () => {
   const isSnoozed = (alert) => snoozed.some(s => s.id === alert.id);
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto">
+      {/* Gradient Header */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-gradient-to-r from-blue-600 to-blue-400 text-white p-6 rounded-b-2xl shadow-md mb-6"
+      >
+        <h1 className="text-3xl font-bold mb-2">Your AlertSphere</h1>
+        <p className="text-blue-50">Stay informed with real-time alerts tailored to your needs.</p>
+      </motion.div>
+      
       {/* Team/User Switcher */}
-      <div className="mb-4 flex gap-4 items-center">
-        <label className="font-semibold">Team:</label>
+      <div className="mb-6 flex flex-wrap gap-4 items-center bg-white/70 backdrop-blur-xl rounded-xl p-4 shadow-md">
+        <label className="font-semibold text-gray-700">Team:</label>
         <select
           value={selectedTeam ? selectedTeam.id : ''}
           onChange={e => {
@@ -129,20 +146,20 @@ const UserDashboard = () => {
             if (team && team.users.length > 0) setSelectedUser(team.users[0]);
             else setSelectedUser(null);
           }}
-          className="border p-1 rounded"
+          className="border border-slate-200 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all"
         >
           {teamUserMap.map(team => (
             <option key={team.id} value={team.id}>{team.name}</option>
           ))}
         </select>
-        <label className="font-semibold ml-4">User:</label>
+        <label className="font-semibold text-gray-700 ml-4">User:</label>
         <select
           value={selectedUser ? selectedUser.id : ''}
           onChange={e => {
             const user = selectedTeam.users.find(u => u.id === Number(e.target.value));
             setSelectedUser(user);
           }}
-          className="border p-1 rounded"
+          className="border border-slate-200 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all disabled:opacity-50"
           disabled={!selectedTeam || !selectedTeam.users.length}
         >
           {selectedTeam && selectedTeam.users.map(user => (
@@ -150,57 +167,40 @@ const UserDashboard = () => {
           ))}
         </select>
       </div>
-      <h1 className="text-2xl font-bold mb-4">User Alerts ({selectedUser ? selectedUser.name : ''} - {selectedTeam ? selectedTeam.name : ''})</h1>
       {/* Active Alerts List */}
-      <div className="bg-white shadow rounded p-4 mb-6">
-        <h2 className="text-lg font-semibold mb-2">Active Alerts</h2>
-        {loading && <div className="text-gray-400">Loading...</div>}
-        {error && <div className="text-red-600">{error}</div>}
-        {success && <div className="text-green-600">{success}</div>}
-        <ul className="divide-y">
-          {alerts.length === 0 && <li className="py-2 text-gray-400">No active alerts.</li>}
-          {alerts.filter(alert => !isSnoozed(alert)).map(alert => {
-            const isRead = readIds.has(alert.id);
-            return (
-              <li
-                key={alert.id}
-                className={`py-2 px-3 flex justify-between items-center rounded ${isRead ? 'bg-gray-100 opacity-70 text-gray-600' : 'bg-white border-l-4 border-blue-500 shadow-sm'}`}
-              >
-                <div>
-                  <div className="font-semibold flex items-center gap-2">
-                    {alert.title}
-                    <span className={`text-[10px] px-2 py-[2px] rounded-full uppercase tracking-wide ${isRead ? 'bg-gray-200 text-gray-700' : 'bg-blue-100 text-blue-700'}`}>
-                      {isRead ? 'Read' : 'Unread'}
-                    </span>
-                  </div>
-                  <div className="text-sm text-gray-500">{alert.message}</div>
-                  <div className="text-xs text-gray-400">Severity: {alert.severity} | Audience: {alert.visibility_type}</div>
-                </div>
-                <div className="flex gap-2">
-                  <button className="bg-green-600 text-white px-3 py-1 rounded" onClick={() => handleRead(alert.id, true)}>Mark Read</button>
-                  <button className="bg-yellow-500 text-white px-3 py-1 rounded" onClick={() => handleSnooze(alert.id)}>Snooze</button>
-                  <button className="bg-gray-400 text-white px-3 py-1 rounded" onClick={() => handleRead(alert.id, false)}>Mark Unread</button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <Card className="mb-6">
+        <SectionHeader
+          title="Active Alerts"
+          icon={Bell}
+        />
+        {loading && <div className="text-gray-400 py-4">Loading...</div>}
+        {error && <div className="text-red-600 py-4 p-3 bg-red-50 rounded-lg border border-red-200">{error}</div>}
+        {success && <div className="text-green-600 py-4 p-3 bg-green-50 rounded-lg border border-green-200">{success}</div>}
+        <AlertList 
+          alerts={alerts}
+          readIds={readIds}
+          onMarkRead={handleRead}
+          onSnooze={handleSnooze}
+          isSnoozed={isSnoozed}
+        />
+      </Card>
       {/* Snoozed Alerts History */}
-      <div className="bg-white shadow rounded p-4 mb-6">
-        <h2 className="text-lg font-semibold mb-2">Snoozed Alerts</h2>
-        <ul className="divide-y">
-          {snoozed.length === 0 && <li className="py-2 text-gray-400">No snoozed alerts.</li>}
-          {snoozed.map(alert => {
-            const isRead = readIds.has(alert.id);
-            return (
-              <li key={alert.id} className={`py-2 px-3 rounded ${isRead ? 'bg-gray-100 opacity-70 text-gray-600' : ''}`}>{alert.title}</li>
-            );
-          })}
-        </ul>
-      </div>
+      <Card className="mb-6">
+        <SectionHeader
+          title="Snoozed Alerts"
+          icon={BellOff}
+        />
+        <SnoozedAlertsList snoozed={snoozed} readIds={readIds} />
+      </Card>
       {/* Auto-refresh info */}
-      <div className="text-xs text-gray-400 text-center">Alerts auto-refresh every 10 seconds.</div>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex items-center justify-center gap-2 text-xs text-gray-400 mt-6"
+      >
+        <div className="animate-pulse bg-blue-400 w-2 h-2 rounded-full"></div>
+        <span>Alerts auto-refresh every 10 seconds</span>
+      </motion.div>
     </div>
   );
 };

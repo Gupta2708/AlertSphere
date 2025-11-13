@@ -1,16 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <Router>
-      <div className="bg-gray-100 min-h-screen">
-        <nav className="bg-blue-700 text-white px-6 py-3 flex gap-4">
-          <Link to="/admin" className="hover:underline">Admin</Link>
-          <Link to="/user" className="hover:underline">User</Link>
-        </nav>
+      <div className="min-h-screen">
+        <Navbar />
         <Routes>
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/user" element={<UserDashboard />} />
