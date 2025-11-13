@@ -15,7 +15,6 @@ import SectionHeader from '../components/SectionHeader';
 import AnalyticsPanel from '../components/AnalyticsPanel';
 import AlertsTable from '../components/AlertsTable';
 import FloatingActionButton from '../components/FloatingActionButton';
-import { Listbox } from '@headlessui/react';
 import { Shield, AlertCircle, Plus, PlusCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
